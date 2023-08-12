@@ -1,0 +1,13 @@
+select h.hacker_id, h.name, sum(x.m) as sm
+from Hackers h,
+    (select hacker_id as hacker_id,
+        challenge_id,
+        max(score) as m
+    from Submissions
+    group by challenge_id, hacker_id
+    having max(score) > 0) x
+where h.hacker_id = x.hacker_id
+group by h.hacker_id, h.name
+order by sum(x.m) desc, h.hacker_id
+
+#https://www.hackerrank.com/challenges/contest-leaderboard/problem?isFullScreen=true
