@@ -1,0 +1,14 @@
+select round(x.LAT_N, 4)
+from (select LAT_N as LAT_N,
+    rank() over (order by LAT_N) as r
+    from STATION
+    order by LAT_N
+     ) x
+where x.r <= (select cast((max(y.r) + 1) / 2 as real)
+from (select LAT_N as LAT_N,
+    rank() over (order by LAT_N) as r
+    from STATION
+    order by LAT_N
+     ) y)
+order by x.r desc
+limit 1;
